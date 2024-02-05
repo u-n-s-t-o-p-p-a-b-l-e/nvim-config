@@ -1,0 +1,51 @@
+/bin/bash
+
+#install npm, nodejs,
+sudo apt install nodejs &&
+sudo apt install npm &&
+#upgrade nodejs
+sudo npm install -g n &&
+sudo n lts &&
+sudo n prune &&
+
+
+#login as root
+
+
+#install npm 
+sudo apt install npm &&
+sudo apt install nodejs 
+sudo npm install -g n &&
+sudo n lts &&
+sudo n prune &&
+
+
+
+
+#install coc
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+#clipboard
+sudo apt install xclip &&
+
+#install ruby
+sudo apt install ruby &&
+sudo apt install ruby-dev &&
+sudo gem install neovim &&
+#npm install
+sudo npm install -g neovim &&
+#python3 pip
+sudo apt install python3-pip &&
+sudo /usr/bin/python3 -m pip install --user --upgrade pynvim &&
+#install fd
+sudo apt install fd-find &&
+sudo apt install ripgrep &&
+
+cd .local/share/plugged/coc.nvim &&
+npm install &&
+#run PlugInstall on nvim
+#run UpdateRemotePlugin on nvim
+#run TSUpdate on nvim
+#run nerdfont.sh
+sudo bash ./nerdfont.sh 
