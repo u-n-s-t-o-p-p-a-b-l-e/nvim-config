@@ -1,9 +1,10 @@
 # Neovim Installation
 
-This will save me 90% of setting time, everytime I'm installing Neovim on new server. 
+This will save me 90% of setting time, everytime I'm installing Neovim on the new server. 
 (This is not dotfiles, just another way to do it)
 <br />
 
+### Installation
 How to install latest version of nvim:
 
 Install Neovim from source
@@ -14,7 +15,6 @@ https://github.com/neovim/neovim/releases
 Guide:
 https://github.com/neovim/neovim/wiki/Installing-Neovim
 ```
-
 make CMAKE_BUILD_TYPE=Release
 sudo make install
 ```
@@ -34,6 +34,10 @@ Create folder nvim inside .config folder:
 cd .config
 mkdir nvim
 ```
+If .config folder does not exist, create one.
+
+<br />
+
 Copy + paste init.vim inside nvim folder created:
 ```
 cd nvim
@@ -44,6 +48,11 @@ Before run the script, make sure to change its permission:
 ```
 cd /path/to/files
 chmod +x *
+```
+
+Then, run requirement script to install all dependencies including Nerdfont (sudo might required):
+```
+./requirement
 ```
 
 After running nvim, in `normal` mode, run:
@@ -69,10 +78,18 @@ Finally run `:Checkhealth` and `:Checkhealth Provider`
 If treesitters giving error, check this article:
 https://stackoverflow.com/questions/70373650/how-to-solve-treesitter-highlighter-error-executing-lua-problem-in-neovim-confi
 <br />
-<hr />
 <br />
-This are example to install language server, also helping fixing chechkhealth errors:
-`:TSInstall vim`
-`:TSInstall c help lua vim`
+This are example to install language server, also helping fixing `chechkhealth` errors:
 
-To learn about plugins I used, open init.vim and go to each plugins Github for documentation.
+
+```
+:TSInstall vim
+```
+
+```
+:TSInstall c help lua vim
+```
+
+To learn about plugins I used, read init.vim and go to each plugins Github for documentation.
+<br />
+<br />
