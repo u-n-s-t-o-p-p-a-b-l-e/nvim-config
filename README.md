@@ -38,17 +38,21 @@ If `.config` folder does not exist, create one.
 
 <br />
 
-Copy + paste init.vim inside nvim folder created:
+Copy + paste or move init.vim inside nvim folder created:
 ```
 cd nvim
 mv /path/to/file/init.vim .
 ```
 <br />
 Before run the script, make sure to change its permission:
-```
+
+```bash
 cd /path/to/files
-chmod +x \*
+chmod +x *
+
 ```
+
+
 
 Then, run requirement script to install all dependencies including Nerdfont (sudo might required):
 ```
