@@ -1,11 +1,11 @@
 # Neovim Installation
 
-This will save me 90% of setting time, everytime I'm installing Neovim on the new server. 
+This will save me 90% of setting time, every time I'm installing Neovim on the new server. 
 (This is not dotfiles, just another way to do it)
 <br />
 
 ### Installation
-How to install latest version of nvim:
+How to install latest version of Nvim:
 
 Install Neovim from source
 
@@ -19,22 +19,22 @@ make CMAKE_BUILD_TYPE=Release
 sudo make install
 ```
 
-If problem persist, please reboot your server/computer
+If problem persists, please reboot your server/computer
 
 Installing from terminal using `apt` or pkg manager will not work
 with some plugins because it will not install the latest version. 
-Therefore need to install latest version using the guide above.
+Therefore, need to install the latest version using the guide above.
 
 <br />
 <hr />
 
 ### Usage
-Create folder nvim inside .config folder:
+Create folder `nvim` inside .config folder:
 ```
 cd .config
 mkdir nvim
 ```
-If .config folder does not exist, create one.
+If `.config` folder does not exist, create one.
 
 <br />
 
@@ -47,7 +47,7 @@ mv /path/to/file/init.vim .
 Before run the script, make sure to change its permission:
 ```
 cd /path/to/files
-chmod +x *
+chmod +x \*
 ```
 
 Then, run requirement script to install all dependencies including Nerdfont (sudo might required):
