@@ -67,8 +67,8 @@ Plug 'https://github.com/prabirshrestha/async.vim'
 Plug 'https://github.com/prabirshrestha/vim-lsp'
 Plug 'https://github.com/dense-analysis/ale'
 
+Plug 'https://github.com/czheo/mojo.vim'
 Plug 'https://github.com/rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
 
 " Required for vim 8
     Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
