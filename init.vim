@@ -101,6 +101,8 @@ let g:onedark_config = {
 
 
 
+" Map Esc to clear search highlighting
+nnoremap <Esc> :noh<CR>
 
 
 
