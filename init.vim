@@ -123,9 +123,9 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
 
-nnoremap <silent><c-s> :<c-u>update<cr>
-vnoremap <silent><c-s> <c-c>:update<cr>gv
-inoremap <silent><c-s> <c-o>:update<cr>
+" nnoremap <silent><c-s> :<c-u>update<cr>
+" vnoremap <silent><c-s> <c-c>:update<cr>gv
+" inoremap <silent><c-s> <c-o>:update<cr>
 nmap <F8> :TagbarToggle<CR>
 
 :set completeopt-=preview " For No Previews
