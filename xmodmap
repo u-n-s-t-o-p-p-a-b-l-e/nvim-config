@@ -1,7 +1,6 @@
 #!/bin/bash/
 
 xmodmap -e "keycode 94 = Escape" 
-xmodmap -e "keycode 108 = BackSpace"
 xmodmap -e "clear control"
 xmodmap -e "keycode 118 = Control_R"
 xmodmap -e "keycode 37 = Control_L"
