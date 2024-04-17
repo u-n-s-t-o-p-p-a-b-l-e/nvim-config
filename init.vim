@@ -104,6 +104,7 @@ let g:onedark_config = {
 nnoremap <Leader>e :Ex<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
+inoremap <A-w> <C-w>
 
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
