@@ -100,6 +100,10 @@ let g:onedark_config = {
 \ }
 
 
+" My custom remapping
+nnoremap <Leader>e :Ex<CR>
+nnoremap nt :tabe<Space>
+nnoremap ; :
 
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
