@@ -17,16 +17,18 @@
 
 :hi NonText guifg=bg
 
-
+" Set the leader key
+let mapleader = " "
+let maplocalleader = " "
 
 call plug#begin()
 
 if has('nvim')
-  Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-  Plug 'https://github.com/Shougo/deoplete.nvim'
-  Plug 'https://github.com/roxma/nvim-yarp'
-  Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
+	Plug 'https://github.com/Shougo/deoplete.nvim'
+	Plug 'https://github.com/roxma/nvim-yarp'
+	Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 endif
 let g:deoplete#enable_at_startup = 1
 Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
@@ -36,7 +38,6 @@ Plug 'https://github.com/vim-airline/vim-airline' " Status bar
 Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
 Plug 'https://github.com/navarasu/onedark.nvim'
 "Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
-
 Plug 'https://github.com/neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'} " Auto Completion
 Plug 'https://github.com/tc50cal/vim-terminal' " Vim Terminal
 Plug 'https://github.com/preservim/tagbar' " Tagbar for code navigation
@@ -59,57 +60,50 @@ Plug 'https://github.com/mattn/emmet-vim'
 Plug 'https://github.com/vim-syntastic/syntastic'
 Plug 'https://github.com/wagnerf42/vim-clippy'
 Plug 'https://github.com/vim-syntastic/syntastic'
-
 Plug 'https://github.com/rust-lang/rust.vim'
 Plug 'https://github.com/mattn/vim-lsp-settings'
 Plug 'https://github.com/prabirshrestha/async.vim'
 " Specify LSP plugin
 Plug 'https://github.com/prabirshrestha/vim-lsp'
 Plug 'https://github.com/dense-analysis/ale'
-
 Plug 'https://github.com/czheo/mojo.vim'
 Plug 'https://github.com/rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
+Plug 'https://github.com/andweeb/presence.nvim'
+
 " Required for vim 8
-    Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
-    " Install this plugin
-    Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
-
-
+Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
+" Install this plugin
+Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
 
 set encoding=UTF-8
 
 call plug#end()
 
-
-
 :colorscheme onedark
-
 " augroup OnedarkSettings
 "     autocmd! VimEnter * colorscheme onedark
 " augroup END
-
 let g:onedark_config = {
-  \ 'style': 'deep',
-  \ 'toggle_style_key': '<leader>ts',
-  \ 'ending_tildes': v:true,
-  \ 'diagnostics': {
-    \ 'darker': v:true,
-    \ 'background': v:true,
-  \ },
-\ }
-
+			\ 'style': 'deep',
+			\ 'toggle_style_key': '<leader>ts',
+			\ 'ending_tildes': v:true,
+			\ 'diagnostics': {
+			\ 'darker': v:true,
+			\ 'background': v:true,
+			\ },
+			\ }
 
 " My custom remapping
 nnoremap <Leader>e :Ex<CR>
+nnoremap <Leader>q :wq!<CR>
+nnoremap <Leader>d :%d<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
 inoremap <A-w> <C-w>
 
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
-
-
 
 " Mapping to move lines
 nnoremap <A-j> :m .+1<CR>==
@@ -123,6 +117,7 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
@@ -151,7 +146,7 @@ nmap <F8> :TagbarToggle<CR>
 let g:airline_powerline_fonts = 1
 
 if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
+	let g:airline_symbols = {}
 endif
 " Vim
 "
@@ -163,8 +158,8 @@ let g:python_host_prog = '/usr/bin/python'
 " LSP Settings
 let g:rustfmt_autosave = 1
 let g:ale_linters = {
-    \ 'rust': ['clippy'],
-    \ }
+			\ 'rust': ['clippy'],
+			\ }
 
 " Enable async processing for ALE
 let g:ale_completion_enabled = 1
@@ -194,41 +189,66 @@ let g:NERDTreeDirArrows = 1
 let g:perl_host_prog = '/usr/bin/perl'
 let g:eslint_host_prog = '/usr/local/bin/eslint'
 let g:user_emmet_mode='i'
+
+" discord presence
+"" General options
+let g:presence_auto_update         = 1
+let g:presence_neovim_image_text   = "The One True Text Editor"
+let g:presence_main_image          = "neovim"
+let g:presence_client_id           = "793271441293967371"
+let g:presence_log_level           = "debug"
+let g:presence_debounce_timeout    = 10
+let g:presence_enable_line_number  = 0
+let g:presence_blacklist           = []
+let g:presence_buttons             = 1
+let g:presence_file_assets         = {}
+let g:presence_show_time           = 1
+
+" Rich Presence text options
+let g:presence_editing_text        = "Editing %s"
+let g:presence_file_explorer_text  = "Browsing %s"
+let g:presence_git_commit_text     = "Committing changes"
+let g:presence_plugin_manager_text = "Managing plugins"
+let g:presence_reading_text        = "Reading %s"
+let g:presence_workspace_text      = "Working on %s"
+let g:presence_line_number_text    = "Line %s out of %s"
+
+
+
+
 "let g:user_emmet_leader_key=','
 let g:user_emmet_expandabbr_key='<tab>'
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 augroup EmmetSettings
-  autocmd! FileType html imap <tab> <plug>(emmet-expand-abbr)
+	autocmd! FileType html imap <tab> <plug>(emmet-expand-abbr)
 augroup END
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
 
 " Rust Analyzer and Clippy Configuration
 augroup RustSettings
-    autocmd!
-    autocmd FileType rust nmap <buffer> gd <Plug>(rust-def)
-    autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
-    autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
+	autocmd!
+	autocmd FileType rust nmap <buffer> gd <Plug>(rust-def)
+	autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
+	autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
 augroup END
 
 let g:user_emmet_settings = {
-\  'variables': {'lang': 'en'},
-\  'html': {
-\    'default_attributes': {
-\      'option': {'value': v:null},
-\      'textarea': {'id': v:null, 'name': v:null, 'cols': 10, 'rows': 10},
-\    },
-\    'snippets': {
-\      'html:5': "<!DOCTYPE html>\n"
-\              ."<html lang=\"${lang}\">\n"
-\              ."<head>\n"
-\              ."\t<meta charset=\"${charset}\">\n"
-\              ."\t<title></title>\n"
-\              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
-\              ."</head>\n"
-\              ."<body>\n\t${child}|\n</body>\n"
-\              ."</html>",
-\    },
-\  },
-\}
-
-                                     
+			\  'variables': {'lang': 'en'},
+			\  'html': {
+			\    'default_attributes': {
+			\      'option': {'value': v:null},
+			\      'textarea': {'id': v:null, 'name': v:null, 'cols': 10, 'rows': 10},
+			\    },
+			\    'snippets': {
+			\      'html:5': "<!DOCTYPE html>\n"
+			\              ."<html lang=\"${lang}\">\n"
+			\              ."<head>\n"
+			\              ."\t<meta charset=\"${charset}\">\n"
+			\              ."\t<title></title>\n"
+			\              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n"
+			\              ."</head>\n"
+			\              ."<body>\n\t${child}|\n</body>\n"
+			\              ."</html>",
+			\    },
+			\  },
+			\}
