@@ -60,7 +60,7 @@ Plug 'https://github.com/mattn/emmet-vim'
 Plug 'https://github.com/vim-syntastic/syntastic'
 Plug 'https://github.com/wagnerf42/vim-clippy'
 Plug 'https://github.com/vim-syntastic/syntastic'
-Plug 'https://github.com/rust-lang/rust.vim'
+"Plug 'https://github.com/rust-lang/rust.vim'
 Plug 'https://github.com/mattn/vim-lsp-settings'
 Plug 'https://github.com/prabirshrestha/async.vim'
 " Specify LSP plugin
@@ -70,7 +70,7 @@ Plug 'https://github.com/czheo/mojo.vim'
 Plug 'https://github.com/rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 Plug 'https://github.com/andweeb/presence.nvim'
-
+Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'}
 " Required for vim 8
 Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 " Install this plugin
@@ -98,6 +98,8 @@ let g:onedark_config = {
 nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :wq!<CR>
 nnoremap <Leader>d :%d<CR>
+nnoremap <Leader>vim :e $MYVIMRC<CR>
+nnoremap <Leader>= gg=G<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
 inoremap <A-w> <C-w>
