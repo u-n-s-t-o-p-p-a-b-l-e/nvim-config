@@ -97,9 +97,12 @@ let g:onedark_config = {
 " My custom remapping
 nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :wq!<CR>
+nnoremap <Leader>a :wqa!<CR>
 nnoremap <Leader>d :%d<CR>
 nnoremap <Leader>vim :e $MYVIMRC<CR>
 nnoremap <Leader>= gg=G<CR>
+nnoremap <Leader>o ggO
+nnoremap <Leader>O Go
 nnoremap nt :tabe<Space>
 nnoremap ; :
 inoremap <A-w> <C-w>
