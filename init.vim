@@ -99,13 +99,16 @@ nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :wq!<CR>
 nnoremap <Leader>a :wqa!<CR>
 nnoremap <Leader>d :%d<CR>
-nnoremap <Leader>vim :e $MYVIMRC<CR>
 nnoremap <Leader>= gg=G<CR>
 nnoremap <Leader>o ggO
-nnoremap <Leader>O Go
+nnoremap <Leader>O Go<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
+nnoremap <Leader>vim :tabe $MYVIMRC<CR>
+nnoremap <Leader>snip :UltiSnipsEdit<CR>
+nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
+inoremap <C-Space> <C-o>$
 
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
