@@ -75,10 +75,24 @@ Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 " Install this plugin
 Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
+" terminal for nvim
+Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
 
 set encoding=UTF-8
 
 call plug#end()
+
+" Setup toggle-term
+lua require("toggleterm").setup{}
+
+function! OpenFullSizedTerminal()
+  ToggleTerm
+  " Calculate 50% of the total lines 
+  let l:mid_height = float2nr(&lines / 2)
+  execute l:mid_height . 'resize'
+endfunction
+
+nnoremap <silent> <C-m> :call OpenFullSizedTerminal()<CR>
 
 :colorscheme onedark
 " augroup OnedarkSettings
@@ -96,12 +110,12 @@ let g:onedark_config = {
 
 " My custom remapping
 nnoremap <Leader>e :Ex<CR>
-nnoremap <Leader>q :wq!<CR>
+nnoremap <Leader>q :q!<CR>
 nnoremap <Leader>a :wqa!<CR>
 nnoremap <Leader>d :%d<CR>
-nnoremap <Leader>= gg=G<CR>
-nnoremap <Leader>o ggO
-nnoremap <Leader>O Go<CR>
+nnoremap <Leader>= m`gg=G``<CR>
+nnoremap <Leader>O ggO
+nnoremap <Leader>o Go<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
 nnoremap <Leader>vim :tabe $MYVIMRC<CR>
@@ -109,7 +123,11 @@ nnoremap <Leader>snip :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
 inoremap <C-Space> <C-o>$
+" Toggleterm entry & exit
+nnoremap <Leader>m :resize 21<CR>
+nnoremap <Leader>l :resize 10<CR>
 
+tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
 
@@ -220,9 +238,6 @@ let g:presence_plugin_manager_text = "Managing plugins"
 let g:presence_reading_text        = "Reading %s"
 let g:presence_workspace_text      = "Working on %s"
 let g:presence_line_number_text    = "Line %s out of %s"
-
-
-
 
 "let g:user_emmet_leader_key=','
 let g:user_emmet_expandabbr_key='<tab>'
