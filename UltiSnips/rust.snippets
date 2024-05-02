@@ -1,4 +1,6 @@
+
 #######################################################################
+
 #                            Rust Snippets                            #
 #######################################################################
 
@@ -52,6 +54,24 @@ snippet impl "Struct/Trait implementation" b
 impl$4 ${1:Type/Trait}${2: for ${3:Type}}${4:<${5:T}>} {
 	${0}
 }
+endsnippet
+
+snippet rn "\r\n" i
+\r\n$1
+endsnippet
+
+snippet = "\r\n" i
+=>$1
+endsnippet
+
+snippet | "|_|" i
+|_| {
+$1
+}
+endsnippet
+
+snippet pwd "shortcut for password char" i
+b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+";$1
 endsnippet
 
 # vim:ft=snippets:
