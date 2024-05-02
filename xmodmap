@@ -5,3 +5,4 @@ xmodmap -e "clear control"
 xmodmap -e "keycode 118 = Control_R"
 xmodmap -e "keycode 37 = Control_L"
 xmodmap -e "add control = Control_R Control_L"
+xset r rate 200 30
