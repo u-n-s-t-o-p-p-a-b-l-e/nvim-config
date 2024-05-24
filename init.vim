@@ -11,8 +11,6 @@
 :set breakindent
 :set showbreak=ͱ
 :set termguicolors
-
-" default updatetime 4000ms is not good for async update
 :set updatetime=100
 
 :hi NonText guifg=bg
@@ -62,6 +60,7 @@ Plug 'https://github.com/wagnerf42/vim-clippy'
 Plug 'https://github.com/vim-syntastic/syntastic'
 "Plug 'https://github.com/rust-lang/rust.vim'
 Plug 'https://github.com/mattn/vim-lsp-settings'
+Plug 'https://github.com/neovim/nvim-lspconfig'
 Plug 'https://github.com/prabirshrestha/async.vim'
 " Specify LSP plugin
 Plug 'https://github.com/prabirshrestha/vim-lsp'
@@ -85,6 +84,22 @@ call plug#end()
 " Setup toggle-term
 lua require("toggleterm").setup{}
 
+
+" Configure HTML language server
+lua << EOF
+require'lspconfig'.html.setup{}
+
+EOF
+
+" Configure ESLint language server
+lua << EOF
+require'lspconfig'.eslint.setup{
+    filetypes = {'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}
+}
+EOF
+
+
+
 function! OpenFullSizedTerminal()
   ToggleTerm
   " Calculate 50% of the total lines 
@@ -93,6 +108,9 @@ function! OpenFullSizedTerminal()
 endfunction
 
 nnoremap <silent> <C-m> :call OpenFullSizedTerminal()<CR>
+" Toggleterm resize
+nnoremap <Leader>m :resize 21<CR>
+nnoremap <Leader>l :resize 10<CR>
 
 :colorscheme onedark
 " augroup OnedarkSettings
@@ -123,9 +141,7 @@ nnoremap <Leader>snip :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
 inoremap <C-Space> <C-o>$
-" Toggleterm entry & exit
-nnoremap <Leader>m :resize 21<CR>
-nnoremap <Leader>l :resize 10<CR>
+
 
 tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
@@ -155,6 +171,13 @@ inoremap <silent><c-s> <c-o>:update<cr>
 nmap <F8> :TagbarToggle<CR>
 
 :set completeopt-=preview " For No Previews
+
+" Disable ESLint for HTML files
+let g:ale_linters = {
+    \ 'javascript': ['eslint'],
+    \ 'typescript': ['eslint'],
+    \ 'html': [],
+    \}
 
 :let g:deoplete#enable_at_startup = 1
 "let g:NERDTreeDirArrowExpandable="+"
@@ -206,12 +229,14 @@ let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
+
 let g:airline_symbols.linenr = ''
 let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
 let g:WebDevIconsOS = 'Darwin'
 let g:webdevicons_enable_nerdtree = 1
 let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
 let g:NERDTreeDirArrows = 1
+
 let g:perl_host_prog = '/usr/bin/perl'
 let g:eslint_host_prog = '/usr/local/bin/eslint'
 let g:user_emmet_mode='i'
