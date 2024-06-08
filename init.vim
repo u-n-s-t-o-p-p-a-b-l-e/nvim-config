@@ -9,7 +9,7 @@
 :set linebreak
 :set colorcolumn=64
 :set breakindent
-:set showbreak=ͱ
+:set showbreak=Í±
 :set termguicolors
 :set updatetime=100
 
@@ -160,24 +160,31 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-nnoremap <C-f> :NERDTreeFocus<CR>
+" nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
 
+" using ctrl-s to save file
 nnoremap <silent><c-s> :<c-u>update<cr>
 vnoremap <silent><c-s> <c-c>:update<cr>gv
 inoremap <silent><c-s> <c-o>:update<cr>
-nmap <F8> :TagbarToggle<CR>
+nmap <F8> :TagbarToggle<CR>ý,ý,
 
 :set completeopt-=preview " For No Previews
 
+" Toggle vertical cursor 
+nnoremap <Leader>vc :set cursorcolumn<CR>
+nnoremap <Leader>vo :set nocursorcolumn<CR>
+
+
+
 " Disable ESLint for HTML files
-let g:ale_linters = {
-    \ 'javascript': ['eslint'],
-    \ 'typescript': ['eslint'],
-    \ 'html': [],
-    \}
+" let g:ale_linters = {ý,ý,
+"     \ 'javascript': ['eslint'],
+"     \ 'typescript': ['eslint'],
+"     \ 'html': [],
+"     \}
 
 :let g:deoplete#enable_at_startup = 1
 "let g:NERDTreeDirArrowExpandable="+"
@@ -212,8 +219,8 @@ let g:ale_linters = {
 
 " Enable async processing for ALE
 let g:ale_completion_enabled = 1
-let g:ale_sign_error = '✘'
-let g:ale_sign_warning = '⚠'
+let g:ale_sign_error = 'â'
+let g:ale_sign_warning = 'â '
 
 " Rust Analyzer setup
 let g:ale_rust_rustc_exe = 'clippy'
@@ -223,14 +230,14 @@ let g:ale_rust_clippy_args = ''
 autocmd FileType rust let b:ale_linters = ['rust']
 
 " airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
+let g:airline_left_sep = 'î°'
+let g:airline_left_alt_sep = 'î±'
+let g:airline_right_sep = 'î²'
+let g:airline_right_alt_sep = 'î³'
+let g:airline_symbols.branch = 'î '
+let g:airline_symbols.readonly = 'î¢'
 
-let g:airline_symbols.linenr = ''
+let g:airline_symbols.linenr = 'î¡'
 let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
 let g:WebDevIconsOS = 'Darwin'
 let g:webdevicons_enable_nerdtree = 1
