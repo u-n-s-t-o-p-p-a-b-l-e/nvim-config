@@ -12,7 +12,9 @@
 :set showbreak=Í±
 :set termguicolors
 :set updatetime=100
-
+" Set the cursor style for different modes
+:autocmd InsertEnter * set cursorline
+:autocmd InsertLeave * set nocursorline
 :hi NonText guifg=bg
 
 " Set the leader key
@@ -20,7 +22,6 @@ let mapleader = " "
 let maplocalleader = " "
 
 call plug#begin()
-
 if has('nvim')
 	Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -33,6 +34,7 @@ Plug 'http://github.com/tpope/vim-surround' " Surrounding ysw)
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
 Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
 Plug 'https://github.com/vim-airline/vim-airline' " Status bar
+Plug 'https://github.com/vim-airline/vim-airline-themes'
 Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
 Plug 'https://github.com/navarasu/onedark.nvim'
 "Plug 'https://github.com/ap/vim-css-color' " CSS Color Preview
@@ -76,19 +78,14 @@ Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
 " terminal for nvim
 Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
-
 set encoding=UTF-8
-
 call plug#end()
 
 " Setup toggle-term
 lua require("toggleterm").setup{}
-
-
 " Configure HTML language server
 lua << EOF
 require'lspconfig'.html.setup{}
-
 EOF
 
 " Configure ESLint language server
@@ -97,8 +94,6 @@ require'lspconfig'.eslint.setup{
     filetypes = {'javascript', 'javascriptreact', 'typescript', 'typescriptreact'}
 }
 EOF
-
-
 
 function! OpenFullSizedTerminal()
   ToggleTerm
@@ -142,7 +137,6 @@ nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
 inoremap <C-Space> <C-o>$
 
-
 tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
@@ -177,8 +171,6 @@ nmap <F8> :TagbarToggle<CR>ý,ý,
 nnoremap <Leader>vc :set cursorcolumn<CR>
 nnoremap <Leader>vo :set nocursorcolumn<CR>
 
-
-
 " Disable ESLint for HTML files
 " let g:ale_linters = {ý,ý,
 "     \ 'javascript': ['eslint'],
@@ -200,6 +192,22 @@ nnoremap <Leader>vo :set nocursorcolumn<CR>
 
 " air-line
 let g:airline_powerline_fonts = 1
+let g:airline_theme='distinguished' " airline theme
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+" Use rectangular separators in Vim Airline
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+" Set mode display mappings in Vim Airline
+let g:airline_section_x = '%{toupper(mode())}'
+let g:airline_mode_map = {
+      \ 'n': 'N',
+      \ 'i': 'I',
+      \ 'r': 'R',
+      \ 'v': 'V',
+      \ 'V': 'VB',
+      \ '^V': 'VB'
+      \ }
 
 if !exists('g:airline_symbols')
 	let g:airline_symbols = {}
@@ -230,14 +238,15 @@ let g:ale_rust_clippy_args = ''
 autocmd FileType rust let b:ale_linters = ['rust']
 
 " airline symbols
-let g:airline_left_sep = 'î°'
-let g:airline_left_alt_sep = 'î±'
-let g:airline_right_sep = 'î²'
-let g:airline_right_alt_sep = 'î³'
-let g:airline_symbols.branch = 'î '
-let g:airline_symbols.readonly = 'î¢'
+" let g:airline_left_sep = 'î°'
+" let g:airline_left_alt_sep = 'î±'
+" let g:airline_right_sep = 'î²'
+" let g:airline_right_alt_sep = 'î³'
+" let g:airline_symbols.branch = 'î '
+" let g:airline_symbols.readonly = 'î¢'
 
-let g:airline_symbols.linenr = 'î¡'
+" let g:airline_symbols.linenr = 'î¡'
+
 let g:WebDevIconsNerdTreeAfterGlyphPadding = '  '
 let g:WebDevIconsOS = 'Darwin'
 let g:webdevicons_enable_nerdtree = 1
