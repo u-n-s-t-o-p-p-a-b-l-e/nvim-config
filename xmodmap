@@ -2,10 +2,13 @@
 
 xmodmap -e "keycode 94 = Escape" 
 xmodmap -e "clear control"
+xmodmap -e "clear delete"
 xmodmap -e "keycode 118 = Control_R"
 xmodmap -e "keycode 37 = Control_L"
+xmodmap -e "keycode 135 = Delete"
 xmodmap -e "add control = Control_R Control_L"
-xmodmap -e "keycode 135 = underscore minus Mode_switch Shift_L"
+xmodmap -e "keycode 119 = underscore minus Mode_switch Shift_L"
+# xmodmap -e "keycode 135 = underscore minus Mode_switch Shift_L"
 
 
 xset r rate 130 100
