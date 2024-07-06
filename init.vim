@@ -59,7 +59,6 @@ Plug 'https://github.com/turbio/bracey.vim', {'do': 'npm install --prefix server
 Plug 'https://github.com/mattn/emmet-vim'
 Plug 'https://github.com/vim-syntastic/syntastic'
 Plug 'https://github.com/wagnerf42/vim-clippy'
-Plug 'https://github.com/vim-syntastic/syntastic'
 "Plug 'https://github.com/rust-lang/rust.vim'
 Plug 'https://github.com/mattn/vim-lsp-settings'
 Plug 'https://github.com/neovim/nvim-lspconfig'
@@ -81,12 +80,14 @@ Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
 set encoding=UTF-8
 call plug#end()
 
-" Setup toggle-term
-lua require("toggleterm").setup{}
 " Configure HTML language server
 lua << EOF
 require'lspconfig'.html.setup{}
 EOF
+
+" Setup toggle-term
+let g:toggleterm_terminal_title = 'Term'
+lua require("toggleterm").setup{}
 
 " Configure ESLint language server
 lua << EOF
@@ -295,6 +296,32 @@ augroup RustSettings
 	autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
 	autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
 augroup END
+
+
+
+" enabling which plugin giving errors warnings in :messages
+augroup PrintSigns
+  autocmd!
+  autocmd VimEnter * call PrintSigns()
+augroup END
+
+function! PrintSigns()
+  redir => signs_output
+  silent! execute 'echo string(sign_getdefined())'
+  redir END
+  echom signs_output
+endfunction
+
+" Disable Syntastic for asm files
+autocmd FileType asm let b:syntastic_mode = 'passive'
+
+" Disable ALE for asm files
+autocmd FileType asm let b:ale_linters = []
+
+" " setting ale linters for assembly
+" let g:ale_linters = {
+" \   'asm': ['nasmlint'],
+" \}
 
 let g:user_emmet_settings = {
 			\  'variables': {'lang': 'en'},
