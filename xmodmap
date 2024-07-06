@@ -5,4 +5,10 @@ xmodmap -e "clear control"
 xmodmap -e "keycode 118 = Control_R"
 xmodmap -e "keycode 37 = Control_L"
 xmodmap -e "add control = Control_R Control_L"
+xmodmap -e "keycode 135 = underscore minus Mode_switch Shift_L"
+
+
 xset r rate 130 100
+#xkbset sticky -twokey
+#xmodmap -e "remove mod4 = Super_L"
+#xmodmap -e "keycode 125 = Super_L"
