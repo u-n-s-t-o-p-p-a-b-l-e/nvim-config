@@ -68,7 +68,6 @@ Plug 'https://github.com/prabirshrestha/vim-lsp'
 Plug 'https://github.com/dense-analysis/ale'
 Plug 'https://github.com/czheo/mojo.vim'
 Plug 'https://github.com/rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
 Plug 'https://github.com/andweeb/presence.nvim'
 Plug 'https://github.com/mg979/vim-visual-multi', {'branch': 'master'}
 " Required for vim 8
@@ -77,6 +76,9 @@ Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
 " terminal for nvim
 Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
+" tera for rust
+Plug 'https://github.com/generic-template/generic-template'
+
 set encoding=UTF-8
 call plug#end()
 
@@ -86,7 +88,6 @@ require'lspconfig'.html.setup{}
 EOF
 
 " Setup toggle-term
-let g:toggleterm_terminal_title = 'Term'
 lua require("toggleterm").setup{}
 
 " Configure ESLint language server
@@ -112,15 +113,15 @@ nnoremap <Leader>l :resize 10<CR>
 " augroup OnedarkSettings
 "     autocmd! VimEnter * colorscheme onedark
 " augroup END
-let g:onedark_config = {
-			\ 'style': 'deep',
-			\ 'toggle_style_key': '<leader>ts',
-			\ 'ending_tildes': v:true,
-			\ 'diagnostics': {
-			\ 'darker': v:true,
-			\ 'background': v:true,
-			\ },
-			\ }
+" let g:onedark_config = {
+" 			\ 'style': 'deep',
+" 			\ 'toggle_style_key': '<leader>ts',
+" 			\ 'ending_tildes': v:true,
+" 			\ 'diagnostics': {
+" 			\ 'darker': v:true,
+" 			\ 'background': v:true,
+" 			\ },
+" 			\ }
 
 " My custom remapping
 nnoremap <Leader>e :Ex<CR>
@@ -133,7 +134,7 @@ nnoremap <Leader>o Go<CR>
 nnoremap nt :tabe<Space>
 nnoremap ; :
 nnoremap <Leader>vim :tabe $MYVIMRC<CR>
-nnoremap <Leader>snip :UltiSnipsEdit<CR>
+nnoremap <Leader>sn :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
 inoremap <C-Space> <C-o>$
@@ -158,6 +159,8 @@ nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 " nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
+
+" coc jump definition
 nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
 
 " using ctrl-s to save file
@@ -171,6 +174,11 @@ nmap <F8> :TagbarToggle<CR>ý,ý,
 " Toggle vertical cursor 
 nnoremap <Leader>vc :set cursorcolumn<CR>
 nnoremap <Leader>vo :set nocursorcolumn<CR>
+
+" Change previous word first letter to uppercase
+nnoremap <Leader>w b~A
+" Swap 2 words
+nnoremap <Leader>ss bdiwbPa<Space><Esc>ea<space>
 
 " Disable ESLint for HTML files
 " let g:ale_linters = {ý,ý,
@@ -281,12 +289,14 @@ let g:presence_reading_text        = "Reading %s"
 let g:presence_workspace_text      = "Working on %s"
 let g:presence_line_number_text    = "Line %s out of %s"
 
-"let g:user_emmet_leader_key=','
+" Emmet tab setting
 let g:user_emmet_expandabbr_key='<tab>'
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 augroup EmmetSettings
 	autocmd! FileType html imap <tab> <plug>(emmet-expand-abbr)
 augroup END
+
+" coc select confirm
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
 
 " Rust Analyzer and Clippy Configuration
@@ -296,7 +306,6 @@ augroup RustSettings
 	autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
 	autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
 augroup END
-
 
 
 " enabling which plugin giving errors warnings in :messages
@@ -343,3 +352,6 @@ let g:user_emmet_settings = {
 			\    },
 			\  },
 			\}
+
+
+
