@@ -1,3 +1,4 @@
+" :set backspace=indent,eol,start
 :set number
 :set autoindent
 :set tabstop=4
@@ -7,7 +8,6 @@
 :set mouse=a
 :set clipboard+=unnamedplus
 :set linebreak
-:set colorcolumn=64
 :set breakindent
 :set showbreak=Í±
 :set termguicolors
@@ -16,6 +16,7 @@
 :autocmd InsertEnter * set cursorline
 :autocmd InsertLeave * set nocursorline
 :hi NonText guifg=bg
+
 
 " Set the leader key
 let mapleader = " "
@@ -59,8 +60,6 @@ Plug 'https://github.com/turbio/bracey.vim', {'do': 'npm install --prefix server
 Plug 'https://github.com/mattn/emmet-vim'
 Plug 'https://github.com/vim-syntastic/syntastic'
 Plug 'https://github.com/wagnerf42/vim-clippy'
-"Plug 'https://github.com/rust-lang/rust.vim'
-Plug 'https://github.com/mattn/vim-lsp-settings'
 Plug 'https://github.com/neovim/nvim-lspconfig'
 Plug 'https://github.com/prabirshrestha/async.vim'
 " Specify LSP plugin
@@ -76,8 +75,6 @@ Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
 " terminal for nvim
 Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
-" tera for rust
-Plug 'https://github.com/generic-template/generic-template'
 
 set encoding=UTF-8
 call plug#end()
@@ -97,6 +94,45 @@ require'lspconfig'.eslint.setup{
 }
 EOF
 
+" Set up Rust analyzer
+let g:coc_global_extensions = ['coc-rust-analyzer']
+
+" Example settings for coc.nvim
+augroup my_coc_config
+  autocmd!
+  autocmd FileType rust let b:coc_suggest_disable = 0
+augroup END
+
+" Example key mappings for coc.nvim
+nmap <silent> <leader>rn <Plug>(coc-rename)
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>gr <Plug>(coc-references)
+
+" Ensure coc-settings.json is in the right place
+let g:coc_user_config = '~/.config/nvim/coc-settings.json'
+
+:colorscheme onedark
+" augroup OnedarkSettings
+"     autocmd! VimEnter * colorscheme onedark
+" augroup END
+let g:onedark_config = {
+			\ 'style': 'deep',
+			\ 'toggle_style_key': '<leader>ts',
+			\ 'ending_tildes': v:true,
+			\ 'diagnostics': {
+			\ 'darker': v:true,
+			\ 'background': v:true,
+			\ },
+			\ }
+
+" syntastic color setting
+hi SpellBad ctermfg=006 ctermbg=045 guifg=#0087d7 guibg=#875fd7
+hi SpellCap ctermfg=003 ctermbg=022 guifg=#87afd7 guibg=#5fafaf
+" Coc color setting
+hi! CocErrorSign guifg=#9e9e9e
+hi! CocInfoSign guibg=#353b45
+hi! CocWarningSign guifg=#d1cd66
+
 function! OpenFullSizedTerminal()
   ToggleTerm
   " Calculate 50% of the total lines 
@@ -109,20 +145,6 @@ nnoremap <silent> <C-m> :call OpenFullSizedTerminal()<CR>
 nnoremap <Leader>m :resize 21<CR>
 nnoremap <Leader>l :resize 10<CR>
 
-:colorscheme onedark
-" augroup OnedarkSettings
-"     autocmd! VimEnter * colorscheme onedark
-" augroup END
-" let g:onedark_config = {
-" 			\ 'style': 'deep',
-" 			\ 'toggle_style_key': '<leader>ts',
-" 			\ 'ending_tildes': v:true,
-" 			\ 'diagnostics': {
-" 			\ 'darker': v:true,
-" 			\ 'background': v:true,
-" 			\ },
-" 			\ }
-
 " My custom remapping
 nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :q!<CR>
@@ -132,7 +154,7 @@ nnoremap <Leader>= m`gg=G``<CR>
 nnoremap <Leader>O ggO
 nnoremap <Leader>o Go<CR>
 nnoremap nt :tabe<Space>
-nnoremap ; :
+nnoremap ' :
 nnoremap <Leader>vim :tabe $MYVIMRC<CR>
 nnoremap <Leader>sn :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
@@ -143,7 +165,7 @@ tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
 nnoremap <Esc> :noh<CR>
 
-" Mapping to move lines
+"Mapping to move lines
 nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 inoremap <A-j> <Esc>:m .+1<CR>==gi
@@ -174,9 +196,11 @@ nmap <F8> :TagbarToggle<CR>ý,ý,
 " Toggle vertical cursor 
 nnoremap <Leader>vc :set cursorcolumn<CR>
 nnoremap <Leader>vo :set nocursorcolumn<CR>
-
+" Toggle colorcolumn
+nnoremap <Leader>cc :set colorcolumn=64<CR>
+nnoremap <Leader>co :set colorcolumn=<CR>
 " Change previous word first letter to uppercase
-nnoremap <Leader>w b~A
+nnoremap <Leader>w b~ea
 " Swap 2 words
 nnoremap <Leader>ss bdiwbPa<Space><Esc>ea<space>
 
@@ -236,13 +260,15 @@ let g:ale_linters = {
 
 " Enable async processing for ALE
 let g:ale_completion_enabled = 1
-let g:ale_sign_error = 'â'
-let g:ale_sign_warning = 'â '
-
+" let g:ale_sign_error = 'â'
+" let g:ale_sign_warning = 'â '
+let g:ale_sign_error = '>'
+let g:ale_sign_warning = '--'
 " Rust Analyzer setup
 let g:ale_rust_rustc_exe = 'clippy'
 let g:ale_rust_clippy_args = ''
-
+" Set this. Airline will handle the rest.
+let g:airline#extensions#ale#enabled = 1
 " Enable ALE for Rust
 autocmd FileType rust let b:ale_linters = ['rust']
 
@@ -299,13 +325,16 @@ augroup END
 " coc select confirm
 inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
 
+" Map leader+h to toggle inlay hints
+nnoremap <silent> <leader>h :CocCommand document.toggleInlayHint<CR>
+"rust-analyzer.completion.autoimport.enable
 " Rust Analyzer and Clippy Configuration
-augroup RustSettings
-	autocmd!
-	autocmd FileType rust nmap <buffer> gd <Plug>(rust-def)
-	autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
-	autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
-augroup END
+" augroup RustSettings
+" 	autocmd!
+" 	autocmd FileType rust nmap <buffer> gd <Plug>(rust-def)
+" 	autocmd FileType rust nmap <buffer> <leader>l <Plug>(ale_lint)
+" 	autocmd FileType rust setlocal omnifunc=v:lua.vim.lsp.omnifunc
+" augroup END
 
 
 " enabling which plugin giving errors warnings in :messages
@@ -352,6 +381,3 @@ let g:user_emmet_settings = {
 			\    },
 			\  },
 			\}
-
-
-
