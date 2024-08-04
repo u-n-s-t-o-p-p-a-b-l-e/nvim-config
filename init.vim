@@ -14,6 +14,12 @@
 :set showbreak=Í±
 :set termguicolors
 :set updatetime=100
+" rust run-ctags | ctags -R -L -
+:set tags=./tags;/
+" get back in indent after esc or :w
+:set indentexpr=GetIndent()
+
+
 " Set the cursor style for different modes
 :autocmd InsertEnter * set cursorline
 :autocmd InsertLeave * set nocursorline
@@ -103,9 +109,23 @@ Plug 'https://github.com/roxma/vim-hug-neovim-rpc'
 Plug 'https://github.com/roxma/nvim-yarp', { 'do': 'pip install -r requirements.txt' }
 " terminal for nvim
 Plug 'https://github.com/akinsho/toggleterm.nvim', {'tag' : '*'}
+Plug 'https://github.com/elixir-editors/vim-elixir'
+
+" codes error handling
+Plug 'https://github.com/folke/trouble.nvim'
+
 
 set encoding=UTF-8
 call plug#end()
+
+
+" get back in indent after :w or esc
+function GetIndent()
+   let lnum = prevnonblank(v:lnum - 1)
+   let ind = indent(lnum)
+   return ind
+endfunction
+
 
 " Configure HTML language server
 lua << EOF
@@ -221,13 +241,11 @@ nnoremap <Leader>co :set colorcolumn=<CR>
 nnoremap <Leader>w b~ea
 " Swap 2 words
 nnoremap <Leader>ss bdiwbPa<Space><Esc>ea<space>
-" Map Ctrl-Backspace to delete the previous word in insert mode.
-" inoremap <silent><C-b> <Esc>bdwa
-inoremap <silent><C-b> <C-w>
 
 " multi line clean-code alignment
 vmap <Leader>ca :'<,'>!column -t -o ' '<CR>gv>
-
+" add a keybinding to toggle Trouble
+nnoremap <leader>xx :Trouble diagnostics<CR>
 
 :let g:deoplete#enable_at_startup = 1
 
@@ -328,3 +346,29 @@ let g:user_emmet_settings = {
 autocmd FileType netrw let b:AutoPairs = 0
 
 
+" Additional configuration (optional)
+lua << EOF
+require("trouble").setup {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+position = "bottom", -- position of the list can be: bottom, top, left, right
+    height = 10, -- height of the trouble list when position is top or bottom
+    width = 50, -- width of the list when position is left or right
+    mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+  }
+EOF
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local cmp = require('cmp')
+local saga = require('lspsaga')
+
+
+local lspconfig = require('lspconfig')
+lspconfig.rust_analyzer.setup {
+  -- Server-specific settings. See `:help lspconfig-setup`
+  settings = {
+    ['rust-analyzer'] = {},
+  },
+}
+
+EOF
