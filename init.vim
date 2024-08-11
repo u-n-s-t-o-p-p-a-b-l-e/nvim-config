@@ -18,7 +18,8 @@
 :set tags=./tags;/
 " get back in indent after esc or :w
 :set indentexpr=GetIndent()
-
+" increment characters
+" :set nrformats+=alpha
 
 " Set the cursor style for different modes
 :autocmd InsertEnter * set cursorline
@@ -100,6 +101,8 @@ Plug 'https://github.com/hrsh7th/cmp-buffer'
 Plug 'https://github.com/hrsh7th/cmp-path'
 Plug 'https://github.com/hrsh7th/cmp-vsnip'
 Plug 'https://github.com/hrsh7th/vim-vsnip'
+Plug 'https://github.com/folke/neodev.nvim'
+
 " LSP UI enhancements
 Plug 'https://github.com/nvimdev/lspsaga.nvim'
 
@@ -114,6 +117,11 @@ Plug 'https://github.com/elixir-editors/vim-elixir'
 " codes error handling
 Plug 'https://github.com/folke/trouble.nvim'
 
+Plug 'https://github.com/williamboman/mason.nvim.git'
+Plug 'https://github.com/folke/todo-comments.nvim'
+
+
+
 
 set encoding=UTF-8
 call plug#end()
@@ -126,16 +134,51 @@ function GetIndent()
    return ind
 endfunction
 
+" Mason setup
+lua << EOF
+require("mason").setup()
+
+
+EOF
+"
 
 " Configure HTML language server
 lua << EOF
+
+-- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+require("neodev").setup({
+  -- add any options here, or leave empty to use the default settings
+})
+
+
+
 require'lspconfig'.html.setup{}
+require'telescope'.setup {
+  extensions = {
+    media_files = {
+      -- filetypes whitelist
+      -- defaults to {"png", "jpg", "mp4", "webm", "pdf"}
+      filetypes = {"png", "webp", "jpg", "jpeg"},
+      -- find command (defaults to `fd`)
+      find_cmd = "rg"
+    }
+  },
+}
+
+require('telescope').load_extension('media_files')
+
+-- Set up the custom theme for media_files using get_dropdown
+vim.api.nvim_set_keymap('n', '<leader>fm', 
+  ":lua require('telescope').extensions.media_files.media_files(require('telescope.themes').get_dropdown({ winblend = 20 }))<CR>", 
+  { noremap = true, silent = true })
+
+
+  
 EOF
-
-
+"
 " Setup toggle-term
 lua require("toggleterm").setup{}
-
+"
 " Configure ESLint language server
 lua << EOF
 require'lspconfig'.eslint.setup{
@@ -160,20 +203,23 @@ let g:onedark_config = {
 " " syntastic color setting
 " hi SpellBad ctermfg=006 ctermbg=045 guifg=#0087d7 guibg=#875fd7
 " hi SpellCap ctermfg=003 ctermbg=022 guifg=#87afd7 guibg=#5fafaf
-
+"
 function! OpenFullSizedTerminal()
   ToggleTerm
-  " Calculate 50% of the total lines 
+  " Calculate 50% of the total lines
+  "
   let l:mid_height = float2nr(&lines / 2)
   execute l:mid_height . 'resize'
 endfunction
 
 nnoremap <silent> <C-m> :call OpenFullSizedTerminal()<CR>
 " Toggleterm resize
+"
 nnoremap <Leader>m :resize 21<CR>
 nnoremap <Leader>l :resize 10<CR>
 
 " My custom remapping
+"
 nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :q!<CR>
 nnoremap <Leader>a :wqa!<CR>
@@ -183,49 +229,65 @@ nnoremap <Leader>O ggO
 nnoremap <Leader>o Go<CR>
 nnoremap nt :tabe<Space>
 nnoremap ' :
+
+" '
+
 nnoremap <Leader>vim :tabe $MYVIMRC<CR>
 nnoremap <Leader>sn :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
 inoremap <A-w> <C-w>
 " inoremap <C-Space> <C-o>$
+"
 inoremap <silent> <C-Space> <Esc>A
 
 tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
+"
 nnoremap <Leader>[ :noh<CR>
 
 "Mapping to move lines
+"
 nnoremap <A-j> :m .+1<CR>==
 nnoremap <A-k> :m .-2<CR>==
 inoremap <A-j> <Esc>:m .+1<CR>==gi
 inoremap <A-k> <Esc>:m .-2<CR>==gi
 vnoremap <A-j> :m '>+1<CR>gv=gv
+" '
 vnoremap <A-k> :m '<-2<CR>gv=gv
 
 " vim surround
+" '
 vmap <Leader>} S}
 vmap <Leader>) S)
 vmap <Leader>] S]
 
 " nnoremap <Leader>fe :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<cr>
+"
 nnoremap <Leader>fe :lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ winblend = 20 }))<cr>
-
 nnoremap <Leader>fd :lua require'telescope.builtin'.find_files(require('telescope.themes').get_ivy({}))<cr>
 
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>ft <cmd>TodoTelescope<cr>
+nnoremap <leader>fv <cmd>Trouble todo<cr>
 
 " nnoremap <C-f> :NERDTreeFocus<CR>
+"
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 
 " using ctrl-s to save file
+"
 nnoremap <silent><c-s> :<c-u>w<cr>
 vnoremap <silent><c-s> <c-c>:w<cr>gv
 inoremap <silent><c-s> <Esc>:w<cr>
 
+
+" jump to code errors
+"
+nnoremap <silent><Leader>j :lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<cr>
 
 nmap <F8> :TagbarToggle<CR>ý,ý,
 
@@ -235,29 +297,39 @@ nmap <F8> :TagbarToggle<CR>ý,ý,
 nnoremap <Leader>vc :set cursorcolumn<CR>
 nnoremap <Leader>vo :set nocursorcolumn<CR>
 " Toggle colorcolumn
+"
 nnoremap <Leader>cc :set colorcolumn=64<CR>
 nnoremap <Leader>co :set colorcolumn=<CR>
 " Change previous word first letter to uppercase
+"
 nnoremap <Leader>w b~ea
 " Swap 2 words
+"
 nnoremap <Leader>ss bdiwbPa<Space><Esc>ea<space>
 
 " multi line clean-code alignment
+"
 vmap <Leader>ca :'<,'>!column -t -o ' '<CR>gv>
 " add a keybinding to toggle Trouble
+"
 nnoremap <leader>xx :Trouble diagnostics<CR>
-
+" Map Ctrl+C in visual mode to copy to clipboard
+"
+vnoremap <C-c> "+y
 :let g:deoplete#enable_at_startup = 1
 
 " air-line
 let g:airline_powerline_fonts = 1
 let g:airline_theme='distinguished' " airline theme
+"
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 " Use rectangular separators in Vim Airline
+"
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 " Set mode display mappings in Vim Airline
+"
 let g:airline_section_x = '%{toupper(mode())}'
 let g:airline_mode_map = {
       \ 'n': 'N',
@@ -281,13 +353,16 @@ let g:python3_host_prog = '/usr/bin/python3'
 let g:python_host_prog = '/usr/bin/python'
 
 " Enable async processing for ALE
+"
 let g:ale_completion_enabled = 1
 " let g:ale_sign_error = 'â'
 " let g:ale_sign_warning = 'â '
+" "
 let g:ale_sign_error = '>'
 let g:ale_sign_warning = '--'
 
 " Set this. Airline will handle the rest.
+"
 let g:airline#extensions#ale#enabled = 1
 
 let g:perl_host_prog = '/usr/bin/perl'
@@ -295,6 +370,7 @@ let g:eslint_host_prog = '/usr/local/bin/eslint'
 let g:user_emmet_mode='i'
 
 " Emmet tab setting
+"
 let g:user_emmet_expandabbr_key='<tab>'
 imap <expr> <tab> emmet#expandAbbrIntelligent("\<tab>")
 augroup EmmetSettings
@@ -303,6 +379,7 @@ augroup END
 
 
 " enabling which plugin giving errors warnings in :messages
+"
 augroup PrintSigns
   autocmd!
   autocmd VimEnter * call PrintSigns()
@@ -316,9 +393,11 @@ function! PrintSigns()
 endfunction
 
 " Disable Syntastic for asm files
+"
 autocmd FileType asm let b:syntastic_mode = 'passive'
 
 " Disable ALE for asm files
+"
 autocmd FileType asm let b:ale_linters = []
 
 let g:user_emmet_settings = {
@@ -343,10 +422,12 @@ let g:user_emmet_settings = {
 			\}
 
 " Disable AutoPairs in netrw
+"
 autocmd FileType netrw let b:AutoPairs = 0
 
 
 " Additional configuration (optional)
+"
 lua << EOF
 require("trouble").setup {
     -- your configuration comes here
@@ -357,18 +438,74 @@ position = "bottom", -- position of the list can be: bottom, top, left, right
     mode = "workspace_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
   }
 EOF
+
+
 lua << EOF
 local nvim_lsp = require('lspconfig')
 local cmp = require('cmp')
 local saga = require('lspsaga')
+local todo = require('todo-comments.config')
 
+todo.setup({})
+-- Initialize lspsaga
+saga.setup({
+code_action_lightbulb = {
+	enable = false,
+	},
+	ui = {
+	code_action = ''
+	},
+	definition = {
+        keys = {
+            edit = 'o'
+        }
+    },
+symbol_in_winbar = {
+	enable = false,
+}
+})
+
+cmp.setup({
+ sources = {
+    { name = 'nvim_lsp' }
+  }
+})
+
+-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 local lspconfig = require('lspconfig')
 lspconfig.rust_analyzer.setup {
   -- Server-specific settings. See `:help lspconfig-setup`
   settings = {
+	  capabilities = capabilities,
     ['rust-analyzer'] = {},
   },
 }
+-- Setup for zls (Zig Language Server)
+lspconfig.zls.setup {
+  -- You can add specific settings for zls here if needed
+  cmd = { '/usr/local/bin/zls' }
+}
+
+-- Setup for vimls (Vim Language Server)
+lspconfig.vimls.setup {
+  -- You can add specific settings for vimls here if needed
+}
+-- Custom key mappings for lspsaga
+local opts = { noremap=true, silent=true }
+
+vim.api.nvim_set_keymap('n', '<Leader>ca', ':Lspsaga code_action<CR>', opts)
+vim.api.nvim_set_keymap('v', '<Leader>ca', ':<C-U>Lspsaga range_code_action<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>gh', ':Lspsaga lsp_finder<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>gp', ':Lspsaga preview_definition<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>gd', ':Lspsaga goto_definition<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>gr', ':Lspsaga rename<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>k', ':Lspsaga hover_doc<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>ls', ':Lspsaga show_line_diagnostics<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>cc', ':Lspsaga show_cursor_diagnostics<CR>', opts)
+vim.api.nvim_set_keymap('n', '<Leader>sb', ':Lspsaga show_buf_diagnostics<CR>', opts)
 
 EOF
+
+let g:zig_fmt_autosave=0
