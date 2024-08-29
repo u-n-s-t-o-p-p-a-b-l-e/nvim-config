@@ -1,8 +1,12 @@
 ":set t_kb
+:set autoread
+:set timeoutlen=200
 :set backspace=indent,eol,start
 :set noshowmode
 :set number
-:set autoindent
+":set autoindent
+:set cindent
+" :set smartindent
 :set tabstop=4
 :set shiftwidth=4
 :set smarttab
@@ -13,7 +17,7 @@
 :set breakindent
 :set showbreak=Í±
 :set termguicolors
-:set updatetime=100
+:set updatetime=4000
 " rust run-ctags | ctags -R -L -
 :set tags=./tags;/
 " get back in indent after esc or :w
@@ -25,6 +29,17 @@
 :autocmd InsertEnter * set cursorline
 :autocmd InsertLeave * set nocursorline
 :hi NonText guifg=bg
+
+:command! Dex exe 'Explore' getcwd()
+":autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
+:autocmd BufWritePre *.c,*.h execute 'silent! !clang-format -i %'
+
+
+autocmd FileType c setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType c setlocal cindent
+autocmd FileType c setlocal smartindent
+autocmd BufRead,BufNewFile *.c setlocal filetype=c
+
 
 " Set the leader key
 let mapleader = " "
@@ -175,6 +190,8 @@ vim.api.nvim_set_keymap('n', '<leader>fm',
 
   
 EOF
+
+
 "
 " Setup toggle-term
 lua require("toggleterm").setup{}
@@ -244,6 +261,16 @@ tnoremap <Esc> <C-\><C-n>
 " Map Esc to clear search highlighting
 "
 nnoremap <Leader>[ :noh<CR>
+"
+"navigation between window panes
+nnoremap ;j <C-w>j
+nnoremap ;k <C-w>k
+nnoremap <silent> ;h :<C-u>exe v:count1 . "wincmd h"<CR>
+nnoremap <silent> ;l :<C-u>exe v:count1 . "wincmd l"<CR>
+nnoremap ;v :vs<CR>
+nnoremap ;s :sp<CR>
+nnoremap ;u :Dex<CR>
+
 
 "Mapping to move lines
 "
@@ -275,14 +302,13 @@ nnoremap <leader>fv <cmd>Trouble todo<cr>
 
 " nnoremap <C-f> :NERDTreeFocus<CR>
 "
-nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 
 " using ctrl-s to save file
 "
-nnoremap <silent><c-s> :<c-u>w<cr>
-vnoremap <silent><c-s> <c-c>:w<cr>gv
-inoremap <silent><c-s> <Esc>:w<cr>
+nnoremap <silent><c-s> :<c-u>w!<cr>
+vnoremap <silent><c-s> <c-c>:w!<cr>gv
+inoremap <silent><c-s> <Esc>:w!<cr>
 
 
 " jump to code errors
@@ -316,7 +342,17 @@ nnoremap <leader>xx :Trouble diagnostics<CR>
 " Map Ctrl+C in visual mode to copy to clipboard
 "
 vnoremap <C-c> "+y
+"
+"
+"
 :let g:deoplete#enable_at_startup = 1
+"
+"
+
+
+filetype plugin indent on
+syntax enable
+
 
 " air-line
 let g:airline_powerline_fonts = 1
@@ -488,6 +524,47 @@ lspconfig.zls.setup {
   cmd = { '/usr/local/bin/zls' }
 }
 
+lspconfig.eslint.setup{}
+lspconfig.gopls.setup{}
+
+
+lspconfig.clangd.setup {
+ on_attach = function(client, bufnr)
+        -- Custom on_attach function to configure keybindings, etc.
+        -- Example: Enable autocompletion, format on save, etc.
+        
+        -- Enable LSP-based formatting
+        vim.api.nvim_buf_set_option(bufnr, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+
+        -- Example keybinding for formatting
+        vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', { noremap = true, silent = true })
+
+        -- Other custom settings
+        -- E.g., You can set up diagnostic keybindings, hover actions, etc.
+    end,
+
+    -- Add any other clangd-specific settings here
+    settings = {
+        clangd = {
+            -- Example settings
+            fallbackFlags = { "-std=c++17" },
+            completeUnimported = true,
+            semanticHighlighting = true,
+        }
+    },
+
+    -- Other configurations (optional)
+    cmd = { "clangd", "--background-index" },  -- Customize the command if necessary
+    filetypes = { "c", "cpp", "objc", "objcpp" },  -- Specify filetypes
+    root_dir = function() return vim.loop.cwd() end,  -- Set the root directory
+    flags = {
+        debounce_text_changes = 150,
+    },
+
+    -- Additional Capabilities for LSP
+    capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+	}
+
 -- Setup for vimls (Vim Language Server)
 lspconfig.vimls.setup {
   -- You can add specific settings for vimls here if needed
@@ -509,3 +586,8 @@ vim.api.nvim_set_keymap('n', '<Leader>sb', ':Lspsaga show_buf_diagnostics<CR>', 
 EOF
 
 let g:zig_fmt_autosave=0
+let g:netrw_banner = 0 " hiding netrw menu
+
+" Automatically refresh NERDTree when a file is created, written, or deleted
+autocmd BufWritePost,BufReadPost,BufEnter * if exists("t:NERDTreeBufName") | execute 'NERDTreeRefreshRoot' | endif
+
