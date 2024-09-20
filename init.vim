@@ -191,6 +191,10 @@ vim.api.nvim_set_keymap('n', '<leader>fm',
   
 EOF
 
+" disabling auto complete in telescope prompt
+"
+autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
+
 
 "
 " Setup toggle-term
@@ -302,7 +306,7 @@ nnoremap <leader>fv <cmd>Trouble todo<cr>
 
 " nnoremap <C-f> :NERDTreeFocus<CR>
 "
-nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-q> :NERDTreeToggle<CR>
 
 " using ctrl-s to save file
 "
@@ -310,8 +314,15 @@ nnoremap <silent><c-s> :<c-u>w!<cr>
 vnoremap <silent><c-s> <c-c>:w!<cr>gv
 inoremap <silent><c-s> <Esc>:w!<cr>
 
+" jump to function origin (definition) in split
+"
+map <C-\> :sp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-" jump to code errors
+"
+"
+"
+"" jump to code errors
 "
 nnoremap <silent><Leader>j :lua vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR})<cr>
 
@@ -352,6 +363,7 @@ vnoremap <C-c> "+y
 
 filetype plugin indent on
 syntax enable
+"
 
 
 " air-line
@@ -413,6 +425,11 @@ augroup EmmetSettings
 	autocmd! FileType html imap <tab> <plug>(emmet-expand-abbr)
 augroup END
 
+"
+"
+" disable emmet/rebind ultisnip while editing in rust file
+"
+autocmd FileType rust inoremap <buffer> <Tab> <C-R>=UltiSnips#ExpandSnippetOrJump()<CR>
 
 " enabling which plugin giving errors warnings in :messages
 "
