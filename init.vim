@@ -543,7 +543,15 @@ lspconfig.zls.setup {
 
 lspconfig.eslint.setup{}
 lspconfig.gopls.setup{}
-
+lspconfig.elixirls.setup{
+  cmd = { "/home/i/system/elixir-ls/release/language_server.sh" },
+  settings = {
+    elixirLS = {
+      dialyzerEnabled = true,   -- Enables Dialyzer warnings
+      fetchDeps = false,        -- Disable automatic fetching of dependencies
+    }
+  }
+}
 
 lspconfig.clangd.setup {
  on_attach = function(client, bufnr)
