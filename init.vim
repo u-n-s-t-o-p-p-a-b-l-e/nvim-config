@@ -71,7 +71,7 @@ endif
 
 Plug 'https://github.com/tpope/vim-surround' " Surrounding ysw)
 Plug 'https://github.com/preservim/nerdtree' " NerdTree
-Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
+" Plug 'https://github.com/tpope/vim-commentary' " For Commenting gcc & gc
 Plug 'https://github.com/vim-airline/vim-airline' " Status bar
 Plug 'https://github.com/vim-airline/vim-airline-themes'
 Plug 'https://github.com/lifepillar/pgsql.vim' " PSQL Pluging needs :SQLSetType pgsql.vim
@@ -91,7 +91,7 @@ Plug 'https://github.com/ryanoasis/vim-devicons'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/mattn/emmet-vim'
 Plug 'https://github.com/honza/vim-snippets'
-Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'https://github.com/Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/turbio/bracey.vim', {'do': 'npm install --prefix server'}
 Plug 'https://github.com/wagnerf42/vim-clippy'
@@ -194,6 +194,7 @@ EOF
 " disabling auto complete in telescope prompt
 "
 autocmd FileType TelescopePrompt call deoplete#custom#buffer_option('auto_complete', v:false)
+autocmd VimEnter * call deoplete#enable()
 
 
 "
@@ -244,15 +245,19 @@ nnoremap <Leader>l :resize 10<CR>
 nnoremap <Leader>e :Ex<CR>
 nnoremap <Leader>q :q!<CR>
 nnoremap <Leader>a :wqa!<CR>
-nnoremap <Leader>d :%d<CR>
+nnoremap <Leader>d :%d \| LspRestart<CR>
 nnoremap <Leader>= m`gg=G``<CR>
 nnoremap <Leader>O ggO
 nnoremap <Leader>o Go<CR>
 nnoremap nt :tabe<Space>
+" paste from buffer
+"
+nnoremap <Leader>0 \"0p
+"
 nnoremap ' :
 
 " '
-
+nnoremap <Leader>lr :LspRestart<CR>
 nnoremap <Leader>vim :tabe $MYVIMRC<CR>
 nnoremap <Leader>sn :UltiSnipsEdit<CR>
 nnoremap <Leader>so :source $MYVIMRC<CR>
@@ -274,6 +279,10 @@ nnoremap <silent> ;l :<C-u>exe v:count1 . "wincmd l"<CR>
 nnoremap ;v :vs<CR>
 nnoremap ;s :sp<CR>
 nnoremap ;u :Dex<CR>
+nnoremap ;f <C-w>\|
+nnoremap ;t <C-w>_
+nnoremap ;b <C-w>=
+
 
 
 "Mapping to move lines
@@ -352,11 +361,15 @@ vmap <Leader>ca :'<,'>!column -t -o ' '<CR>gv>
 nnoremap <leader>xx :Trouble diagnostics<CR>
 " Map Ctrl+C in visual mode to copy to clipboard
 "
+
+
+nnoremap <leader>lt :LspStart ltex<CR>
+
 vnoremap <C-c> "+y
 "
 "
 "
-:let g:deoplete#enable_at_startup = 1
+:let g:deoplete#enable_at_startup = 0
 "
 "
 
@@ -397,7 +410,9 @@ endif
 "
 let $PATH .= ':' . '/usr/bin/perl'
 
+let g:python3_host_prog = '~/.venvs/nvim/bin/python'
 let g:python3_host_prog = '/usr/bin/python3'
+
 let g:python_host_prog = '/usr/bin/python'
 
 " Enable async processing for ALE
@@ -529,16 +544,38 @@ cmp.setup({
 
 local lspconfig = require('lspconfig')
 lspconfig.rust_analyzer.setup {
-  -- Server-specific settings. See `:help lspconfig-setup`
+  capabilities = capabilities,
   settings = {
-	  capabilities = capabilities,
-    ['rust-analyzer'] = {},
+    ['rust-analyzer'] = {
+      check = {
+        command = "clippy",
+      },
+      diagnostics = {
+        enableExperimental = false,
+      },
+      procMacro = {
+        enable = true,
+
+
+      },
+    },
   },
 }
+
+
 -- Setup for zls (Zig Language Server)
 lspconfig.zls.setup {
   -- You can add specific settings for zls here if needed
   cmd = { '/usr/local/bin/zls' }
+}
+
+require'lspconfig'.ltex.setup {
+	autostart = false,
+  settings = {
+    ltex = {
+      language = "en",
+    },
+  },
 }
 
 lspconfig.eslint.setup{}
@@ -607,6 +644,23 @@ vim.api.nvim_set_keymap('n', '<Leader>k', ':Lspsaga hover_doc<CR>', opts)
 vim.api.nvim_set_keymap('n', '<Leader>ls', ':Lspsaga show_line_diagnostics<CR>', opts)
 vim.api.nvim_set_keymap('n', '<Leader>cc', ':Lspsaga show_cursor_diagnostics<CR>', opts)
 vim.api.nvim_set_keymap('n', '<Leader>sb', ':Lspsaga show_buf_diagnostics<CR>', opts)
+
+
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+  pattern = "*.rs",
+  callback = function(ev)
+    local content = vim.api.nvim_buf_get_lines(ev.buf, 0, -1, false)
+    if #content == 1 and content[1] == "" then
+      vim.cmd("LspRestart")
+    end
+  end,
+})
+
+
+
+
+
 
 EOF
 
